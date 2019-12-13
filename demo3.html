@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>音视频相关属性方法</title>
+</head>
+<body>
+<video src="resource/video/test.mp4" controls></video>
+<audio src="resource/audio/test.mp3" controls></audio>
+<script>
+    window.onload=function(){
+        var video=document.querySelector('video');
+        var audio=document.querySelector('audio');
+        video.addEventListener('loadeddata',function(){
+            console.log('总时间:'+video.duration);
+            console.log('分辨率:'+video.videoWidth,video.videoHeight);
+
+        });
+        // setInterval(function(){
+        //     console.log('播放时长：'+video.currentTime);
+        // },1000)
+        // 是否禁音
+        console.log(video.muted);
+        //音量
+        console.log(video.volume);
+        //是否暂停
+        console.log(video.paused);
+        //是否播放完毕
+        console.log(video.ended);
+        //是否报错
+        console.log(video.error);
+        //返回地址
+        console.log(video.currentSrc);
+        //预览图片
+        console.log(video.poster);
+        //宽高
+        console.log(video.width,video.height);
+
+
+    }
+</script>
+</body>
+</html>

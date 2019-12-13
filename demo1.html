@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas获取路径坐标范围</title>
+    <style>
+        canvas{
+            background:#c7edcc;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="test" width="500" height="300"></canvas>
+    <script>
+        window.onload=function(){
+            var canvas=document.querySelector('#test');
+            if(!canvas.getContext)return;
+            var ctx=canvas.getContext('2d');
+            ctx.strokeStyle="red";
+            ctx.arc(100,100,50,0,360*Math.PI/180);
+            ctx.stroke();
+            var path=canvas.toDataURL();
+            console.log(path);
+            canvas.onclick=function(e){
+
+                e=e||window.event;
+                var x=e.clientX-this.offsetLeft;
+                var y=e.clientY-this.offsetTop;
+                if(ctx.isPointInPath(x,y)){
+                    console.log(x,y);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

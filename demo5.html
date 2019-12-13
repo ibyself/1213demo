@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>播放器</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+<div class="wrap">
+    <video src="https://blz-videos.nosdn.127.net/1/OverWatch/AnimatedShots/Overwatch_AnimatedShot_Soldier76_Hero.mp4"></video>
+    <div class="controls">
+        <div class="btns">
+            <span class="start"></span>
+            <span class="stop"></span>
+        </div>
+        <div class="progress">
+            <div class="container">
+                <div class="inner"></div>
+            </div>
+            <div class="yellow"></div>
+        </div>
+        <div class="time-sound">
+            <div class="time">
+                <span class="now">00:00:00</span>/<span class="all">00:00:00</span>
+            </div>
+            <div class="sound">
+                <div class="muted">
+                    <span></span>
+                </div>
+                <div class="sound-progress">
+                    <div class="sound-container">
+                        <div class="sound-inner">
+                        </div>
+                    </div>
+                    <div class="sound-yellow"></div>
+                </div>
+            </div>
+            <div class="full-screen">
+                <span></span>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="js/drag.js"></script>
+<script type="text/javascript">
+    window.onload=function(){
+        var video=document.querySelector('video');
+        var wrap=document.querySelector('.wrap');
+        var controls=document.querySelector('.controls');
+        var progress=document.querySelector('.progress');
+        var container=document.querySelector('.container');
+        var inner=document.querySelector('.inner');
+        var yellow=document.querySelector('.yellow');
+        var soundProgress=document.querySelector('.sound-progress');
+        var soundContainer=document.querySelector('.sound-container');
+        var soundInner=document.querySelector('.sound-inner');
+        var soundYellow=document.querySelector('.sound-yellow');
+        var start=document.querySelector('.start');
+        var stop=document.querySelector('.stop');
+        video.width=document.documentElement.clientWidth;
+        video.height=document.documentElement.clientHeight-controls.offsetHeight;
+        window.onresize=function(){
+            if(document.documentElement.clientWidth>=600){
+                video.width=document.documentElement.clientWidth;
+                video.height=document.documentElement.clientHeight-controls.offsetHeight;
+            }
+        };
+        //拖拽
+        var innerCall={
+            move:function (){
+                this.style.left=yellow.style.width=this.offsetLeft+'px';
+            }
+        };
+        var soundCall={
+            move:function(){
+                this.style.left=soundYellow.style.width=this.offsetLeft+'px';
+            }
+        };
+        $.drag(soundInner,soundCall);
+        $.drag(inner,innerCall);
+        //拖拽结束
+
+        player();
+        function player(){
+            //播放
+            var timer=0;
+            start.onclick=function(){
+                if(video.paused){
+                    video.play();
+                    start.classList.add('active');
+                    timer=setInterval(move,1000);
+                }else{
+                    video.pause();
+                    start.classList.remove('active');
+                    clearInterval(timer);
+                }
+            };
+            //暂停
+            stop.onclick=function(){
+                video.pause();
+                start.classList.remove('active');
+                clearInterval(timer);
+                inner.style.left=yellow.style.width='0px';
+                video.currentTime=0;
+            };
+            //进度条点击播放
+            progress.onclick=function(e){
+                e=e||window.event;
+                start.classList.add('active');
+                timer=setInterval(move,1000);
+                video.currentTime=video.duration*((e.clientX-progress.offsetLeft)/(progress.clientWidth-inner.clientWidth));
+                video.play();
+            };
+
+            function move(){
+                inner.style.left=yellow.style.width=(video.currentTime/video.duration)*(container.clientWidth-inner.clientWidth)+'px';
+            }
+        }
+
+    }
+</script>
+</body>
+</html>
